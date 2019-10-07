@@ -4,6 +4,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+      window.location.hash="no-back-button";
+      window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+      window.onhashchange=function(){window.location.hash="no-back-button";}
       var intervalo = 1;
       var contador = 0;
 
