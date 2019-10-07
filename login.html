@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[SO1]Practica3</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/solar/bootstrap.min.css" rel="stylesheet" integrity="sha384-8nq3OiMMgrVFAHyRMMO+DTfMEciSY+c3Awhj/5ljQ1xck1Uv2BUtMjsjLD8GT5Er" crossorigin="anonymous">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Sistemas Operativos 1</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Iniciar<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Registrarse</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="jumbotron">
+    <h2 align="center" class="display-3">Bienvenido!</h2>
+    <hr class="my-4">
+    <input type="text" style="margin:0px auto; display:block;" placeholder="Ingrese su Usuario" id="Usuario"></br>
+    <input type="password" style="margin:0px auto; display:block;" placeholder="Ingrese su Contrasenia" id="Contrasenia">
+    <p class="lead">
+      <a class="btn btn-secondary" onclick="prueba();" style="margin:15px auto; display:block;" href="#" role="button">Iniciar Sesion</a>
+      <script type="text/javascript">
+        function prueba(){
+          newuser = document.getElementById('Usuario').value;
+          newcontrasenia = document.getElementById('Contrasenia').value;
+          usuariogo = "{{ .Usuario }}";
+          contraseniago = "{{ .Contrasenia }}";
+          if (newuser === usuariogo && newcontrasenia === contraseniago) {
+            window.location.href = "/Home";
+          }else {
+            alert("Usuario o Contrasenia, ¡INCORRECTA!");
+          }
+        }
+      </script>
+    </p>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</html>

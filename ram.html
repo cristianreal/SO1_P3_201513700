@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      var intervalo = 1;
+      var contador = 0;
+
+      var Data = [
+                      ['Tiempo', 'Porcentaje'],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ];
+    
+    google.charts.load("current", {
+      callback: function () {
+
+        drawChart();
+        setInterval(drawChart, intervalo * 1000);
+
+        function drawChart() {
+          $.ajax({
+          url: "/datosRAM",
+          type: "get",
+          success: function (json) {
+
+            $("#memoriatotal").html("Memoria Total= " + (Math.round(json['Total']*100)/100) + "Mb");
+            $("#memoriaconsumida").html("Memoria Consumida= " + (Math.round(json['Consumida']*100)/100)  + "Mb");
+            $("#porcentajememoria").html("Porcentaje de Memoria= " + (Math.round(json['Porcentaje']*100)/100) + "%");
+
+
+            var options = {
+                titlePosition: 'none',
+                hAxis: {title: 'Tiempo [segundos]',  titleTextStyle: {color: '#ffffff'}},
+                vAxis: {title: 'Memoria Utilizada [Porcentaje]', minValue: 0, titleTextStyle: {color: '#ffffff'}},
+                backgroundColor: '#839496',
+                legend: { 
+                position: 'bottom',
+                textStyle: {color: '#ffffff'}
+                }
+            };
+
+            contador+=intervalo;
+
+            var Lista_ValoresGraficar = [
+              ['Tiempo', 'Porcentaje'],
+              [Data[2][0], Data[2][1]],
+              [Data[3][0], Data[3][1]],
+              [Data[4][0], Data[4][1]],
+              [Data[5][0], Data[5][1]],
+              [Data[6][0], Data[6][1]],
+              [Data[7][0], Data[7][1]],
+              [Data[8][0], Data[8][1]],
+              [Data[9][0], Data[9][1]],
+              [Data[10][0], Data[10][1]],
+              [contador, json['Porcentaje']]
+            ];
+          
+
+            Data = Lista_ValoresGraficar;
+            
+            var data = google.visualization.arrayToDataTable(Data);
+            var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
+            chart.draw(data, options);
+            }
+          });
+        }
+
+      },
+        packages: ['corechart', 'line']
+      });
+
+    </script>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/solar/bootstrap.min.css" rel="stylesheet" integrity="sha384-8nq3OiMMgrVFAHyRMMO+DTfMEciSY+c3Awhj/5ljQ1xck1Uv2BUtMjsjLD8GT5Er" crossorigin="anonymous">
+  </head>
+  <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="http://localhost:8082/Home">Sistemas Operativos 1</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="http://localhost:8082/Home">Pagina Principal <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:8082/CPU">Monitor CPU</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:8082/RAM">Monitor RAM</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <button type="button" onclick="CerrarSesion();" class="btn btn-secondary">Cerrar Sesion</button>
+            <script type="text/javascript">
+              function CerrarSesion(){
+                window.location.href = "http://localhost:8082/";
+              }
+            </script>
+        </form>
+    </div>
+</nav>
+</br>
+<h2 align="center">MONITOR DE MEMORIA RAM</h2>
+</br>
+    <h3 id="memoriatotal" align="center"></h3>
+    <h3 id="memoriaconsumida" align="center"></h3>
+    <h3 id="porcentajememoria" align="center"></h3>
+
+    <div class="jumbotron">
+    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+    </div>
+  </body>
+</html>
+

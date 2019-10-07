@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      window.location.hash="no-back-button";
+      window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+      window.onhashchange=function(){window.location.hash="no-back-button";}
+      $.ajax({
+      url: "/Home",
+      type: "get",
+      success: function () {
+        $("#total").html("Cantidad total de procesos: {{ .TotalProcesos }}");
+        $("#running").html("Cantidad de procesos en ejecución: {{ .TotalEjecucion }}");
+        $("#sleeping").html("Número de procesos suspendidos: {{ .TotalSuspendidos }}");
+        $("#stoped").html("Número de procesos detenidos: {{ .TotalDetenidos }}");
+        $("#zombie").html("Número de procesos zombie: {{ .TotalZombie }}");
+      }
+      });
+  </script>
+    <meta charset="UTF-8">
+    <title>[SO1]Practica3</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/solar/bootstrap.min.css" rel="stylesheet" integrity="sha384-8nq3OiMMgrVFAHyRMMO+DTfMEciSY+c3Awhj/5ljQ1xck1Uv2BUtMjsjLD8GT5Er" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="http://localhost:8082/Home">Sistemas Operativos 1</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="http://localhost:8082/Home">Pagina Principal <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:8082/CPU">Monitor CPU</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:8082/RAM">Monitor RAM</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <button type="button" onclick="CerrarSesion();" class="btn btn-secondary">Cerrar Sesion</button>
+            <script type="text/javascript">
+              function CerrarSesion(){
+                window.location.href = "http://localhost:8082/";
+              }
+            </script>
+        </form>
+    </div>
+</nav>
+</br>
+<h3 align="center">PROCESOS</h3>
+</br>
+<p><h5 align="center" id="total"></h5></p>
+<p><h5 align="center" id="running"></h5></p>
+<p><h5 align="center" id="sleeping"></h5></p>
+<p><h5 align="center" id="stoped"></h5></P>
+<p><h5 align="center" id="zombie"></h5></P>
+<div class="jumbotron">
+<table class="table table-hover">
+  <thead>
+    <tr class="table-info">
+      <th scope="col">PID</th>
+      <th scope="col">Usuario</th>
+      <th scope="col">Estado</th>
+      <th scope="col">%RAM</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Kill</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .ListaProcesos }}
+    <tr class="table-success">
+      <th scope="row"> {{ .PID }} </th>
+      <td> {{ .Usuario }} </td>
+      <td> {{ .Estado }} </td>
+      <td> {{ .Memoria }} </td>
+      <td> {{ .Nombre }} </td>
+      <td><a class="btn btn-warning" href="/kill/{{.PID}}" role="button">Eliminar</a></td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+</div>
+</body>
+</html>
